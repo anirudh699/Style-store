@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
 from django.views.generic import View
 from store.forms import Signupform,SiginForm
-from store.models import Product, User
+from store.models import BasketItem, Product, Size, User
 from django.core.mail import send_mail
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
@@ -135,7 +135,13 @@ class SiginView(View):
             
         
         return render(request,self.template_name,{"form":form_instance})
+
+class SignoutView(View):
+    def get(self,request,*args,**kwargs):
         
+        logout(request)
+        
+        return redirect("signin")     
 
 class ProductListView(View):
     
@@ -157,7 +163,42 @@ class ProductDetailView(View):
         
         return render(request,self.template_name,{"data":qs})
         
-
+class AddtoCartView(View):
+        
+        def post(self,request,*args,**kwargs):
+            
+            id=kwargs.get("pk")
+            
+            size=request.POST.get("size")
+            
+            quantity=request.POST.get("quantity")
+            
+            product_object=Product.objects.get(id=id)
+            
+            size_object=Size.objects.get(name=size)
+            
+            basket_object=request.user.cart
+            
+            BasketItem.objects.create(
+                product_object=product_object,
+                quantity=quantity,
+                size_object=size_object,
+                basket_object=basket_object,
+                
+            )
+            print("item added")
+            
+            return redirect('cart-summary')  
+        
+class CartSummaryView(View):
+    template_name="cart_summary.html"
+    
+    def get(self,request,*args,**kwargs):
+        
+        qs=BasketItem.objects.filter(basket_object=request.user.cart,is_order_placed=False)
+        
+        return render(request,self.template_name,{"basket_items":qs})
+            
 
     
     
