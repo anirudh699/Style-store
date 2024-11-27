@@ -9,6 +9,7 @@ from django.contrib.auth import authenticate,login,logout
 def send_opt_phone(otp):
     
     from twilio.rest import Client
+    
   
     client = Client(account_sid, auth_token)
     message = client.messages.create(
@@ -197,7 +198,13 @@ class CartSummaryView(View):
         
         qs=BasketItem.objects.filter(basket_object=request.user.cart,is_order_placed=False)
         
-        return render(request,self.template_name,{"basket_items":qs})
+        basket_item_count=qs.count()
+        
+        baket_total=sum([bi.item_total for bi in qs])
+        
+        
+        
+        return render(request,self.template_name,{"basket_items":qs,"basket_total":baket_total,"basket_item_count":basket_item_count})
             
 
     

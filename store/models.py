@@ -5,7 +5,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save
 
 from random import randint
-
+        
 
 # Create your models here.
 
@@ -119,6 +119,12 @@ class BasketItem(BaseModel):
     is_order_placed=models.BooleanField(default=False)
 
     basket_object=models.ForeignKey(Basket,on_delete=models.CASCADE,related_name="cart_item")
+    
+    
+    @property
+    def item_total(self):
+        
+        return self.product_object.price*self.quantity
 
 # Query to fetch basket item to authenticated user
 

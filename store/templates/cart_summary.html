@@ -1,69 +1,50 @@
 {%extends 'base.html'%}
 
 {%block main_block%}
-
-<div class="container mx-auto mt-10">
+<div class="container mx-auto mt-10 w-3/4">
     <div class="sm:flex shadow-md my-10">
       <div class="  w-full  sm:w-3/4 bg-white px-10 py-10">
         <div class="flex justify-between border-b pb-8">
           <h1 class="font-semibold text-2xl">Shopping Cart</h1>
-          <h2 class="font-semibold text-2xl">3 Items</h2>
+          <h2 class="font-semibold text-2xl">{{basket_item_count}} Items</h2>
         </div>
+
+        {%for bi in basket_items%}
         <div class="md:flex items-strech py-8 md:py-10 lg:py-8 border-t border-gray-50">
+          {%if bi.product_object.picture%}
           <div class="md:w-4/12 2xl:w-1/4 w-full">
-            <img src="https://i.ibb.co/6gzWwSq/Rectangle-20-1.png" alt="Black Leather Purse" class="h-full object-center object-cover md:block hidden" />
+            <img src="{{bi.product_object.picture.url}}" alt="product-image" class="h-full object-center object-cover md:block hidden" />
+            <img src="{{bi.product_object.picture.url}}" alt="product-image" class="md:hidden w-full h-full object-center object-cover" />
+          </div>
+          {%else%}
+          <div class="md:w-4/12 2xl:w-1/4 w-full">
+            <img src="https://i.ibb.co/TTnzMTf/Rectangle-21.png" alt="Black Leather Purse" class="h-full object-center object-cover md:block hidden" />
             <img src="https://i.ibb.co/TTnzMTf/Rectangle-21.png" alt="Black Leather Purse" class="md:hidden w-full h-full object-center object-cover" />
           </div>
+          {%endif%}
           <div class="md:pl-3 md:w-8/12 2xl:w-3/4 flex flex-col justify-center">
-            <p class="text-xs leading-3 text-gray-800 md:pt-0 pt-4">RF293</p>
+            <p class="text-xs leading-3 text-gray-800 md:pt-0 pt-4">{{bi.product_object.brand_object}}</p>
             <div class="flex items-center justify-between w-full">
-              <p class="text-base font-black leading-none text-gray-800">}</p>
-              <select aria-label="Select quantity" class="py-2 px-1 border border-gray-200 mr-6 focus:outline-none">
-                  <option>01</option>
-                  <option>02</option>
-                  <option>03</option>
-                </select>
+              <p class="text-base font-black leading-none text-gray-800">{{bi.product_object.title}}</p>
+              <span aria-label="Select quantity" class="py-2 px-1 border border-gray-200 mr-6 focus:outline-none">
+                    {{bi.quantity}}
+                </span>
             </div>
-            <p class="text-xs leading-3 text-gray-600 pt-2">Height: 10 inches</p>
-            <p class="text-xs leading-3 text-gray-600 py-4">Color: Black</p>
-            <p class="w-96 text-xs leading-3 text-gray-600">Composition: 100% calf leather</p>
+            <p class="text-xs leading-3 text-gray-600 pt-2"> Size: {{bi.size_object}}</p>
+            <p class="text-xs leading-3 text-gray-600 py-4">color: {{bi.product_object.color}}</p>
+            <p class="w-96 text-xs leading-3 text-gray-600">price: ₹{{bi.product_object.price}}</p>
             <div class="flex items-center justify-between pt-5">
               <div class="flex itemms-center">
                 <p class="text-xs leading-3 underline text-gray-800 cursor-pointer">Add to favorites</p>
                 <p class="text-xs leading-3 underline text-red-500 pl-5 cursor-pointer">Remove</p>
               </div>
-              <p class="text-base font-black leading-none text-gray-800">,000</p>
+              <p class="  font-blod ">₹{{bi.item_total}}</p>
             </div>
           </div>
         </div>
+        {%endfor%}
   
-        <div class="md:flex items-strech py-8 md:py-10 lg:py-8 border-t border-gray-50">
-          <div class="md:w-4/12 2xl:w-1/4 w-full">
-            <img src="https://i.ibb.co/6gzWwSq/Rectangle-20-1.png" alt="Black Leather Purse" class="h-full object-center object-cover md:block hidden" />
-            <img src="https://i.ibb.co/TTnzMTf/Rectangle-21.png" alt="Black Leather Purse" class="md:hidden w-full h-full object-center object-cover" />
-          </div>
-          <div class="md:pl-3 md:w-8/12 2xl:w-3/4 flex flex-col justify-center">
-            <p class="text-xs leading-3 text-gray-800 md:pt-0 pt-4">RF293</p>
-            <div class="flex items-center justify-between w-full">
-              <p class="text-base font-black leading-none text-gray-800">Luxe card holder</p>
-              <select aria-label="Select quantity" class="py-2 px-1 border border-gray-200 mr-6 focus:outline-none">
-                  <option>01</option>
-                  <option>02</option>
-                  <option>03</option>
-                </select>
-            </div>
-            <p class="text-xs leading-3 text-gray-600 pt-2">Height: 10 inches</p>
-            <p class="text-xs leading-3 text-gray-600 py-4">Color: Black</p>
-            <p class="w-96 text-xs leading-3 text-gray-600">Composition: 100% calf leather</p>
-            <div class="flex items-center justify-between pt-5">
-              <div class="flex itemms-center">
-                <p class="text-xs leading-3 underline text-gray-800 cursor-pointer">Add to favorites</p>
-                <p class="text-xs leading-3 underline text-red-500 pl-5 cursor-pointer">Remove</p>
-              </div>
-              <p class="text-base font-black leading-none text-gray-800">,000</p>
-            </div>
-          </div>
-        </div>
+       
         <a href="{%url 'productlist'%}" class="flex font-semibold text-indigo-600 text-sm mt-10">
           <svg class="fill-current mr-2 text-indigo-600 w-4" viewBox="0 0 448 512">
             <path
@@ -75,17 +56,17 @@
       <div id="summary" class=" w-full   sm:w-1/4   md:w-1/2     px-8 py-10">
         <h1 class="font-semibold text-2xl border-b pb-8">Order Summary</h1>
         <div class="flex justify-between mt-10 mb-5">
-          <span class="font-semibold text-sm uppercase">Items 3</span>
-          <span class="font-semibold text-sm">590$</span>
+          <span class="font-semibold text-sm uppercase">Items {{basket_item_count}}</span>
+          <span class="font-semibold text-sm">₹{{basket_total}}</span>
         </div>
-        <div>
+        <!-- <div>
           <label class="font-medium inline-block mb-3 text-sm uppercase">
                 Shipping
               </label>
           <select class="block p-2 text-gray-600 w-full text-sm">
                 <option>Standard shipping - $10.00</option>
               </select>
-        </div>
+        </div> -->
         <div class="py-10">
           <label
                 for="promo"
@@ -106,7 +87,7 @@
         <div class="border-t mt-8">
           <div class="flex font-semibold justify-between py-6 text-sm uppercase">
             <span>Total cost</span>
-            <span>$600</span>
+            <span>₹{{basket_total}}</span>
           </div>
           <button class="bg-indigo-500 font-semibold hover:bg-indigo-600 py-3 text-sm text-white uppercase w-full">
                 Checkout
