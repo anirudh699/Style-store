@@ -30,4 +30,5 @@ urlpatterns = [
     path('product/<int:pk>/',views.ProductDetailView.as_view(),name="product-detail"),
     path('addtocart/<int:pk>/',views.AddtoCartView.as_view(),name="add-to-cart"),
     path('cart-summary',views.CartSummaryView.as_view(),name="cart-summary"),
+    path('delete/<int:pk>',views.DeleteCartItemView.as_view(),name="delete"),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -36,7 +36,7 @@
             <div class="flex items-center justify-between pt-5">
               <div class="flex itemms-center">
                 <p class="text-xs leading-3 underline text-gray-800 cursor-pointer">Add to favorites</p>
-                <p class="text-xs leading-3 underline text-red-500 pl-5 cursor-pointer">Remove</p>
+                <a href="{%url 'delete' bi.id%}"><p class="text-xs leading-3 underline text-red-500 pl-5 cursor-pointer">remove</p></a>
               </div>
               <p class="  font-blod ">₹{{bi.item_total}}</p>
             </div>

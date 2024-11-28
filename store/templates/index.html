@@ -62,7 +62,7 @@
        <!-- product-list -->
 
         <section>
-          <div class="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8" id="collections">
+          <div class="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 " id="collections">
             <header class="text-center">
               <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">Product Collection</h2>
               <p class="mt-4 text-gray-600">
@@ -124,8 +124,8 @@
               </div>
             </div>
 
-            <ul class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {%for p in data%}
+            <ul class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 ">
+              {%for p in  page_obj.object_list %}
               <li>
                   <a href="{%url  'product-detail' p.id %}" class="group block overflow-hidden">
                     {%if p.picture%}
@@ -161,6 +161,17 @@
               {%endfor%}
             </ul>
           </div>
+          <center>
+            {%if page_obj.has_previous %}    <!--{  \# whether the previous page exists #} -->
+                <a href="?page={{page_obj.previous_page_number}}"><</a>   <!--# link to the prev page #}-->
+            {% endif %}
+            <span>{{page_obj.number}}</span>  <!-- {# the current page number #} -->
+           
+            {%if page_obj.has_next %} <!-- {# whether the next page exists #} -->
+                <a href="?page={{page_obj.next_page_number}}">></a> <!-- {# link to the next page #} -->
+            {% endif %}
+        </center>
+          
         </section>
       
         <!-- product list -->

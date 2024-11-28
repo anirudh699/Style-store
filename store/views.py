@@ -5,6 +5,7 @@ from store.models import BasketItem, Product, Size, User
 from django.core.mail import send_mail
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
+from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 # Create your views here.
 def send_opt_phone(otp):
     
@@ -142,7 +143,8 @@ class SignoutView(View):
         
         logout(request)
         
-        return redirect("signin")     
+        return redirect("signin")   
+      
 
 class ProductListView(View):
     
@@ -152,7 +154,20 @@ class ProductListView(View):
         
         qs=Product.objects.all()
         
-        return render(request,self.template_name,{"data":qs})
+        p=Paginator(qs,4)
+        
+        page_number=request.GET.get('page')
+        
+        try:
+         page_obj = p.get_page(page_number)
+        except PageNotAnInteger:
+              page_obj = p.page(1)
+        except EmptyPage:
+            page_obj = p.page(p.num_pages)
+        context = {'page_obj': page_obj}
+            
+            
+        return render(request,self.template_name,context)
 
 class ProductDetailView(View):
     template_name="product-detail.html"
@@ -206,9 +221,18 @@ class CartSummaryView(View):
         
         return render(request,self.template_name,{"basket_items":qs,"basket_total":baket_total,"basket_item_count":basket_item_count})
             
-
-    
-    
+class DeleteCartItemView(View):
+        
+    def get(self,request,*args,**kwargs):
+        
+        id=kwargs.get("pk")
+        
+        BasketItem.objects.get(id=id).delete()
+        messages.success(request,"Item removed")
+        return redirect("cart-summary")
+        
+        
+      
             
             
             
