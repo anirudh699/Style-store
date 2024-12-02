@@ -1,16 +1,18 @@
 from django.shortcuts import redirect, render
-from django.views.generic import View
-from store.forms import Signupform,SiginForm
-from store.models import BasketItem, Product, Size, User
+from django.views.generic import View,TemplateView,FormView
+from store.forms import OrderForm, Signupform,SiginForm
+from store.models import BasketItem, OrderItem, Product, Size, User,Order
 from django.core.mail import send_mail
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
+
+
+
 # Create your views here.
 def send_opt_phone(otp):
     
-    from twilio.rest import Client
-    
+ 
   
     client = Client(account_sid, auth_token)
     message = client.messages.create(
@@ -218,7 +220,7 @@ class CartSummaryView(View):
         baket_total=sum([bi.item_total for bi in qs])
         
         
-        
+         
         return render(request,self.template_name,{"basket_items":qs,"basket_total":baket_total,"basket_item_count":basket_item_count})
             
 class DeleteCartItemView(View):
@@ -231,11 +233,72 @@ class DeleteCartItemView(View):
         messages.success(request,"Item removed")
         return redirect("cart-summary")
         
-        
+
+       
       
             
+class PlaceHolderView(View):
+    
+    template_name="place_order.html"
+    
+    form_class=OrderForm
+    def get(self,request,*args,**kwargs):
+        form_instance=self.form_class()
+        
+        qs=request.user.cart.cart_items.filter(is_order_placed=False)
+        
+        return render(request,self.template_name,{"form":form_instance,"data":qs})
+
+    def post(self,request,*args,**kwargs):
+        
+        form_data=request.POST
+        
+        
+        form_insatance=self.form_class(form_data)
+        
+        if form_insatance.is_valid():
+            
+            form_insatance.instance.customer=request.user
+            
+            order_instance=form_insatance.save()
             
             
+            basket_items=request.user.cart.cart_item.filter(is_order_placed=False)
+            
+            for bi in basket_items:
+                
+                OrderItem.objects.create(
+                    order_object=order_instance,
+                    product_object=bi.product_object,
+                    quantity=bi.quantity,
+                    size_object=bi.size_object,
+                    price=bi.product_object.price   
+                    
+                )
+                
+                bi.is_order_placed=True
+                
+                bi.save()
+                
+        return redirect('productlist')               
+        
+class OrderSummaryView(View):
+    
+    template_name="order_summary.html"
+    
+    def get(self,request,*args,**kwargs):
+        
+        qs=reversed(request.user.orders.all())
+        
+        return render(request,self.template_name,{"orders":qs})   
+    
+       
+        
+    
+    
+    
+    
+    
             
         
             

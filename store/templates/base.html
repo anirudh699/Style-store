@@ -124,6 +124,10 @@
                         <span class="absolute -top-1 -right-1 inline-flex items-center justify-center px-1.5 py-1 text-xs font-bold text-white bg-teal-600 rounded-full">{{item_count}}</span>
                     </a>
 
+                    <!-- order -->
+
+                  
+
                     <!-- Profile -->
                     <div class="relative">
                         <button 
@@ -139,9 +143,9 @@
                         <ul 
                             id="profile-dropdown"
                             class="absolute hidden mt-2 right-0 bg-white border rounded-md text-gray-700 shadow-lg w-40 custom-scrollbar z-50"
-                         > <li><span class="block px-4 py-2 ">Hello {{request.user}}</span></li>
+                         > <li><span class="block px-4 py-2 text-green-400 text-xl font-semibold ">Hello {{request.user}}</span></li>
                             <li><a href="#" class="block px-4 py-2 hover:bg-gray-100">My Profile</a></li>
-                            <li><a href="#" class="block px-4 py-2 hover:bg-gray-100">Orders</a></li>
+                            <li><a href="{%url 'order-summary'%}" class="block px-4 py-2 hover:bg-gray-100">Orders</a></li>
                             <li><a href="{%url 'signout'%}" class="block px-4 py-2 text-red-600 hover:bg-red-50">Logout</a></li>
                         </ul>
                     </div>
