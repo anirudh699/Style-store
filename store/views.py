@@ -6,13 +6,16 @@ from django.core.mail import send_mail
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
+import os
 
 
 
 # Create your views here.
 def send_opt_phone(otp):
     
- 
+    from twilio.rest import Client
+    account_sid = os.environ.get("TWILIO_ACCOUNT_SID")
+    auth_token = os.environ.get("TWILIO_AUTH_TOKEN")
   
     client = Client(account_sid, auth_token)
     message = client.messages.create(

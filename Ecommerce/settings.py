@@ -14,13 +14,17 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-p)(d6p(raxcon&-(z7ktje%1ukrcmcgg#qm6ej2^2=n-t_%gi2'
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -128,3 +132,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'store.User'
 
 
+EMAIL_HOST = os.environ.get("EMAIL_HOST")
+EMAIL_USE_TLS = True
+EMAIL_PORT = os.environ.get("EMAIL_PORT")
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+
+# TWILIO_RECOVERY_CODE = 
+TWILIO_ACCOUNT_SID = os.environ.get("TWILIO_ACCOUNT_SID")
+TWILIO_AUTH_TOKEN = os.environ.get("TWILIO_AUTH_TOKEN")
