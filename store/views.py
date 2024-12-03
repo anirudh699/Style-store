@@ -7,6 +7,8 @@ from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 import os
+RZP_KEY_ID=os.environ.get("RZP_KEY_ID")
+RZP_KEY_SECRET=os.environ.get("RZP_KEY_SECRET")
 
 
 
@@ -246,11 +248,14 @@ class PlaceHolderView(View):
     
     form_class=OrderForm
     def get(self,request,*args,**kwargs):
+        
         form_instance=self.form_class()
         
-        qs=request.user.cart.cart_items.filter(is_order_placed=False)
+        qs=request.user.cart.cart_item.filter(is_order_placed=False)
         
-        return render(request,self.template_name,{"form":form_instance,"data":qs})
+        total=sum([bi.item_total for bi in qs])
+        
+        return render(request,self.template_name,{"form":form_instance,"items":qs,"total":total})
 
     def post(self,request,*args,**kwargs):
         
